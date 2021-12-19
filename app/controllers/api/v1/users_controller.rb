@@ -2,7 +2,8 @@ class Api::V1::UsersController < ApplicationController
   before_action :set_user, only: %i[show update destroy]
   before_action :check_owner, only: %i[update destroy]
   def show
-    render json: UserSerializer.new(@user).serializable_hash
+    options = { include: [:products] }
+    render json: UserSerializer.new(@user, options).serializable_hash
   end
 
   def create
