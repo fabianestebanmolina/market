@@ -7,12 +7,12 @@ class OrderTest < ActiveSupport::TestCase
     @product2 = products(:two)
   end
 
-# este test se volvio obsoleto pero igual sirve.....  
-#  test 'Should have a positive total' do
-#    order = orders(:one)
-#    order.total = -1
-#    assert_not order.valid?
-#  end
+  # este test se volvio obsoleto pero igual sirve.....
+  #  test 'Should have a positive total' do
+  #    order = orders(:one)
+  #    order.total = -1
+  #    assert_not order.valid?
+  #  end
 
   test 'Should set total' do
     order = Order.new user_id: @order.user_id
