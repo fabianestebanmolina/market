@@ -24,8 +24,7 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_equal @order.user.orders.count, json_response['data'].count
   end
   test 'should show order' do
-    get api_v1_order_url(@order), headers: { Authorization: JsonWebToken.encode(user_id:
-    @order.user_id) }, as: :json
+    get api_v1_order_url(@order), headers: { Authorization: JsonWebToken.encode(user_id: @order.user_id) }, as: :json
     assert_response :success
     json_response = JSON.parse(response.body)
     include_product_attr = json_response['included'][0]['attributes']
@@ -41,8 +40,8 @@ class Api::V1::OrdersControllerTest < ActionDispatch::IntegrationTest
     assert_difference('Order.count', 1) do
       assert_difference('Placement.count', 2) do
         post api_v1_orders_url, params: @order_params,
-         as: :json,
-          headers: { Authorization: JsonWebToken.encode(user_id: @order.user_id) }
+                                as: :json,
+                                headers: { Authorization: JsonWebToken.encode(user_id: @order.user_id) }
       end
     end
     assert_response :created

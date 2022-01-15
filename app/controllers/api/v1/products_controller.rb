@@ -2,16 +2,25 @@ class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: %i[show update destroy]
   before_action :check_login, only: %i[create]
   before_action :check_owner, only: %i[update destroy]
+  include Paginable
+
   def show
     options = { include: [:user] }
     render json: ProductSerializer.new(@product, options).serializable_hash
   end
 
   def index
-    render json: ProductSerializer.new(@products).serializable_hash
+    @products = Product.page(current_page).per(per_page) # .search(params)-----> el test no pasa cuando este metodo esta activo ...sera poorque no hice la seccion de buscar productos????
+    options = {
+      links: {
+        first: api_v1_products_path(page: 1),
+        last: api_v1_products_path(page: @products.total_pages),
+        prev: api_v1_products_path(page: @products.prev_page),
+        next: api_v1_products_path(page: @products.next_page)
+      }
+    }
+    render json: ProductSerializer.new(@products, options).serializable_hash
   end
-
-  before_action :check_login, only: %i[create]
 
   def create
     product = current_user.products.build(product_params)
